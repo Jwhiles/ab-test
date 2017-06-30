@@ -1,4 +1,4 @@
-import React, { Component }O+normalfrom 'react';
+import React, { Component } from 'react';
 import optimizely from 'optimizely-client-sdk';
 import './App.css';
 
