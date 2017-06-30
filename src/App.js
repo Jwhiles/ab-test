@@ -1,17 +1,45 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Component }O+normalfrom 'react';
+import optimizely from 'optimizely-client-sdk';
 import './App.css';
 
+var optimizelyClientInstance;
+var url = 'https://cdn.optimizely.com/json/8463270712.json';
+
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state =  { variation: null };
+  }
+  componentDidMount() {
+    this.getVariation();
+  }
+  getVariation() {
+    window.fetch(url, { mode: 'cors' })
+      .then((response) => response.json())
+      .then((datafile) => {
+        optimizelyClientInstance = optimizely.createInstance({
+          datafile: datafile,
+          skipJSONValidation: true
+        });
+        })
+        .then(() => {
+          const id = Math.floor(Math.random() * 1000) + 1  
+          const variation = optimizelyClientInstance.activate('testing', String(id));
+          this.setState({
+            variation 
+          });
+        })
+  }
   render() {
+    const { variation } = this.state;
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>this is an experiment experiment</h2>
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          {variation === "different" ? "you are different" : "you are normal"}
         </p>
       </div>
     );
